@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<!-- 数据库属性配置文件 -->
+		<context:property-placeholder location="classpath:org/hibernate2/xml/jdbc.properties"/>
+		<!-- 数据库连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.pass}"></property>
+		</bean>
+		
+		<!-- 数据库连接池 -->
+		<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql:///company?useUnicode=true&amp;characterEncoding=utf8"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+		</bean> -->
+	<!-- hibernate核心对象sessionFactory -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="hibernateProperties">
+	<props>
+	<!-- 定义hibernate方言（专业语言） -->
+	<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+	<!-- 自动转换查询语句，更新数据库 -->
+	<prop key="hibernate.hbm2ddl.auto">update</prop>
+	<!-- 显示查询语句 -->
+	<prop key="hibernate.show_sql">true</prop>
+	<!-- 格式化查询语句 -->
+	<prop key="hibernate.format_sql">true</prop>
+	</props>
+	</property>
+	<property name="packagesToScan" value="org.hibernate2.pojo"></property>
+	</bean>
+	
+		<!-- hibernate核心对象sessionFactory -->
+		<!-- <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property> -->
+		<!-- hibernate配置文件 -->
+		<!-- <property name="hibernateProperties">
+		<props> -->
+		<!-- org.hibernate.dialect.MySQL{5}InnoDBDialect MySQL版本为5以上的时{5}需要加上-->
+		<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop> -->
+		<!-- hibernate 自动转换数据库语言，链接数据库-->
+  		<!-- create 有表则删除，重新创建，update更新 -->
+		<!-- <prop key="hibernate.hbm2ddl.auto">update</prop>
+		</props>
+		</property> -->
+		<!-- 扫描pojo包 -->
+		<!-- <property name="packagesToScan" value="org.hibernate2.pojo"></property>
+		</bean> -->
+		
+	<!-- 注册事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven/>
+	
+	
+</beans>
