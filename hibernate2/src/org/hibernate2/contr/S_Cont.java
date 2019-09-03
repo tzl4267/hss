@@ -36,6 +36,8 @@ public class S_Cont {
 	@RequestMapping(value="/show")
 	public String show(@ModelAttribute("list") List list){
 		Session session = sf.openSession();
+		
+		
 		Emp e = new Emp();
 		
 		
