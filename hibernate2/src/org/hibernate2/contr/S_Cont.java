@@ -28,6 +28,8 @@ public class S_Cont {
 	@ModelAttribute(value="list")
 	public List get_emp(){
 		List list = new ArrayList<>();
+		
+		System.err.println("srr");
 		return list;
 	}
 	
